@@ -1,0 +1,109 @@
+/*
+Style Name: Style #1
+Do not specify panel or product width or height
+Do not specify carousel width, height
+*/
+
+/* General container used to contain all types of carousels and grids */
+.nexternal-style1-container {
+}
+
+/* Each carousel type has its own class */
+.nexternal-style1-horizontal, .nexternal-style1-grid, .nexternal-style1-single {
+    background: #DFDFDF;
+    border: 1px solid black;
+    float: left;
+}
+
+.nexternal-style1-vertical {
+    float: left;
+}
+
+/* Buttons are straight forward */
+.nexternal-style1-horizontal-previous, .nexternal-style1-horizontal-next, .nexternal-style1-vertical-previous, .nexternal-style1-vertical-next {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nexternal-style1-horizontal-previous {
+    float: left;
+    background: url('/wp-content/plugins/nexternal/previous.png') left center no-repeat;
+    height: 215px;
+    width: 30px;
+}
+
+.nexternal-style1-horizontal-next {
+    float: left;
+    background: url('/wp-content/plugins/nexternal/next.png') right center no-repeat;
+    height: 215px;
+    width: 30px;
+}
+
+.nexternal-style1-vertical-previous {
+    background: url('/wp-content/plugins/nexternal/up.png') top center no-repeat;
+    width: 170px;
+    height: 30px;
+}
+
+.nexternal-style1-vertical-next {
+    background: url('/wp-content/plugins/nexternal/down.png') bottom center no-repeat;
+    width: 170px;
+    height: 30px;
+    clear: both;
+}
+
+.nexternal-style1-product {
+    width: 160px;
+    height: 220px;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: center;
+    padding: 5px;
+    margin: 8px;
+    border: 2px solid orange;
+    background: white;
+}
+
+/* vertical overrides */
+.nexternal-style1-vertical ul .nexternal-style1-product {
+    border: 0;
+}
+
+/* Classes exist for price, original-price, image, name and rating */
+.nexternal-style1-product-price, .nexternal-style1-product-price {
+    font-size: 18px;
+    line-height: 24px;
+    color: red;
+    font-weight: bold
+}
+
+.nexternal-style1-product img {
+    width: 120px;
+}
+
+.nexternal-style1-product-original-price {
+    text-decoration: line-through;
+}
+
+.nexternal-style1-product-rating {
+    width: 100px;
+    height: 20px;
+    background: url('/wp-content/plugins/nexternal/star.jpg') left repeat-x;
+    margin: auto;
+}
+
+/* required */
+.nexternal-style1-vertical ul .nexternal-style1-product {
+    margin: 0;  /*margin breaks vertical carousels */
+}
+
+.nexternal-style1-grid ul, .nexternal-style1-single ul {
+    list-style: none;
+    margin: 0;
+    clear: both;
+}
+
+.nexternal-style1-grid ul li {
+    float: left;
+}
