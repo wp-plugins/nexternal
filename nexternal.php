@@ -1,10 +1,16 @@
 <?php
 /*
 Plugin Name: Nexternal
-Description: Allows users to include Nexternal product information into their pages and posts
+Description: Allows users to include Nexternal product information into their posts
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
-Version: 1.1.2
+Version: 1.1.4
+
+CHANGELOG:
+10/3/11 - 1.1.4 - added strrpos to productOptions generation in window.php. This prevents the list of options from ending in a comma
+10/3/11 - 1.1.4 - updated jQuery version in window.php, jQuery moved their hosted javascript files to code.jquery.com 
+7/29/11 - 1.1.3 - added 'custom attributes link' field to nexternal menu. this is put into the text's and image's <a> tag.
+
 */
 
 include_once (dirname (__FILE__)."/lib/nexternal-api.php");
@@ -45,7 +51,7 @@ function nexternal_menu() {
 // converts data value 'on' or empty for a checkbox to checked='yes' or nothing
 function nexternal_convertDataToChecked($dataValue) {
     if ($dataValue == 'on') return "checked='yes'";
-    return '';
+    return '';    
 }
 
 function nexternal_display_menu() {
@@ -75,6 +81,7 @@ function nexternal_display_menu() {
         $data['defaultDisplayProductShortDescription'] = $_POST['nexternal_displayProductShortDescription'];
         $data['defaultProductsInView'] = $_POST['nexternal_productsInView'];
         $data['defaultStyle'] = $_POST['nexternal_defaultStyle'];
+        $data['customLinkAttributes'] = $_POST['nexternal_customLinkAttributes'];
     }
     update_option('nexternal', $data);
 
@@ -106,7 +113,7 @@ function nexternal_display_menu() {
             if (empty($_POST['nexternal_password'])) $errorMessages[] = 'Please enter your password.';
         }
     }
-
+    
     // generate error message div element based on $errorMessages
     $displayErrors = '';
     if (count($errorMessages) > 0) {
@@ -130,6 +137,7 @@ HTML;
     $defaultGridSizeRows = $data['defaultGridSizeRows'];
     $defaultGridSizeColumns = $data['defaultGridSizeColumns'];
     $defaultProductsInView = $data['defaultProductsInView'];
+    $customLinkAttributes = htmlspecialchars(stripslashes($data['customLinkAttributes']));
 
     $defaultDisplayProductRatingChecked = nexternal_convertDataToChecked($data['defaultDisplayProductRating']);
     $defaultDisplayProductPriceChecked = nexternal_convertDataToChecked($data['defaultDisplayProductPrice']);
@@ -186,7 +194,7 @@ HTML;
 	        <p><strong>Password:</strong>
 	        <input type="text" name="nexternal_password" size="45" /></p>
         </div>
-
+  
         <h2>Default Display Options</h2>
 
         <p><label for="nexternal_carouselType">Carousel Type:</label>
@@ -220,6 +228,12 @@ HTML;
         <p><input type="checkbox" id="nexternal_displayProductName" name="nexternal_displayProductName" $defaultDisplayProductNameChecked> Display Product's Name?</p>
 
         <p><input type="checkbox" id="nexternal_displayProductShortDescription" name="nexternal_displayProductShortDescription" $defaultDisplayProductShortDescriptionChecked> Display Product's Short Description?</p>
+
+        <h2>Advanced</h2>
+
+        <p>Custom Link Attributes: $customLinkAttributes
+        <br>
+        Change to: <input size="40" type="text" id="nexternal_customLinkAttributes" name="nexternal_customLinkAttributes" value=""></p>
 
         <h2>Default Style</h2>
 

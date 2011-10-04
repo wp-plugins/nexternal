@@ -63,6 +63,7 @@ if ($data['activeKey'] == '' || $data['accountName'] == '') {
             $productOptions .= "\"$productName\",";
             $productSKUs .= "productSKUs['$productName'] = '$productSKU';\n";
     }
+    $productOptions = substr($productOptions, 0, -1); // remove the last comma from product 
     if ($productSKUs == '') wp_die(__("There are no products in the Nexternal store: <b>" . $data['accountName'] . "</b><br>You will be unable to add a Product List to your post."));
 }
 
@@ -95,7 +96,7 @@ if ($dh = opendir($path)) {
 
 	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
 
-    <script src="http://jqueryui.com/jquery-1.5.1.js"></script> 
+    <script src="http://code.jquery.com/jquery-1.6.3.js"></script> 
 	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script> 
 	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script> 
 	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script> 

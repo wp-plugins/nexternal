@@ -13,6 +13,8 @@ class nexternal_shortcodes {
 
         $data = get_option('nexternal');
         if ($data['activeKey'] == '') return; // abort if there is no active key
+        
+        $customLinkAttributes = $data['customLinkAttributes'];
 
         $randomId = "default-" . dechex(rand(0, hexdec('ff')));
 
@@ -125,10 +127,10 @@ class nexternal_shortcodes {
                 $out .= "<li class='nexternal-$style-product nexternal-$style-product-$i nexternal-$style-product-sku-$productSKU'>";
                 
                 if ($displayproductname == 'true')
-                    $out .= "<div class='nexternal-$style-product-name nexternal-$style-product-name-$productSKU'><a href='$productUrl'>$productName</a></div>";
+                    $out .= "<div class='nexternal-$style-product-name nexternal-$style-product-name-$productSKU'><a href='$productUrl' " . stripslashes($customLinkAttributes) . ">$productName</a></div>";
                     
                 if ($displayproductimage == 'true')
-                    $out .= "<div class='nexternal-$style-product-image nexternal-product-image-$productSKU'><a href='$productUrl'><img src='$productImage' border='0'></a></div>";
+                    $out .= "<div class='nexternal-$style-product-image nexternal-product-image-$productSKU'><a href='$productUrl' " . stripslashes($customLinkAttributes) . "><img src='$productImage' border='0'></a></div>";
                     
                 if ($displayproductrating == 'true' and $productRating != '')
                     $out .= "<div class='nexternal-$style-product-rating nexternal-$style-product-rating-$productSKU' style='width: ".$productRatingWidth."px'></div>";
