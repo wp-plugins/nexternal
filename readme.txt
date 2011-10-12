@@ -89,6 +89,9 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://www.alreadyse
 
 == Changelog ==
 
+= 1.1.5 =
+- Modified jquery instantiation
+
 = 1.1.4 =
 - Adjusted the add products functionality as the search was not updating
 

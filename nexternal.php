@@ -4,12 +4,13 @@ Plugin Name: Nexternal
 Description: Allows users to include Nexternal product information into their posts
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
-Version: 1.1.4
+Version: 1.1.5
 
 CHANGELOG:
+10/11/11 - 1.1.5 - fixed jquery inclusion bug
 10/3/11 - 1.1.4 - added strrpos to productOptions generation in window.php. This prevents the list of options from ending in a comma
-10/3/11 - 1.1.4 - updated jQuery version in window.php, jQuery moved their hosted javascript files to code.jquery.com 
-7/29/11 - 1.1.3 - added 'custom attributes link' field to nexternal menu. this is put into the text's and image's <a> tag.
+10/3/11 - 1.1.4 - updated jQuery version in window.php, jQuery moved their hosted javascript files to code.jquery.com
+7/29/11 - 1.1.3 - added custom attributes link field to nexternal menu. this is put into the texts and images <a> tag.
 
 */
 
@@ -19,6 +20,8 @@ include_once (dirname (__FILE__)."/lib/shortcodes.php");
 
 define('nexternalPlugin_ABSPATH', WP_PLUGIN_DIR.'/'.plugin_basename( dirname(__FILE__) ).'/' );
 define('nexternalPlugin_URLPATH', WP_PLUGIN_URL.'/'.plugin_basename( dirname(__FILE__) ).'/' );
+
+wp_enqueue_script("jquery");
 
 add_action('admin_menu', 'nexternal_menu');
 add_action('wp_head', 'nexternal_head');
@@ -30,7 +33,6 @@ function nexternal_endsWith($haystack,$needle,$case=true) {
 
 function nexternal_head() {
 
-    wp_enqueue_script('jquery' );
     echo '<script type="text/javascript" src="' . get_settings('siteurl') . '/wp-content/plugins/nexternal/carousel/jcarousellite.js"></script>' . "\n";
 
     $path = ABSPATH.'wp-content/plugins/nexternal/styles';
@@ -51,7 +53,7 @@ function nexternal_menu() {
 // converts data value 'on' or empty for a checkbox to checked='yes' or nothing
 function nexternal_convertDataToChecked($dataValue) {
     if ($dataValue == 'on') return "checked='yes'";
-    return '';    
+    return '';
 }
 
 function nexternal_display_menu() {
@@ -113,7 +115,7 @@ function nexternal_display_menu() {
             if (empty($_POST['nexternal_password'])) $errorMessages[] = 'Please enter your password.';
         }
     }
-    
+
     // generate error message div element based on $errorMessages
     $displayErrors = '';
     if (count($errorMessages) > 0) {
@@ -194,7 +196,7 @@ HTML;
 	        <p><strong>Password:</strong>
 	        <input type="text" name="nexternal_password" size="45" /></p>
         </div>
-  
+
         <h2>Default Display Options</h2>
 
         <p><label for="nexternal_carouselType">Carousel Type:</label>
