@@ -3,16 +3,18 @@ Contributors: Nathan Smallcomb
 Author URI: http://www.alreadysetup.com/nexternal
 Tags: ecommerce, shopping, store, nexternal, sell
 Requires at least: 2.8
-Tested up to: 3.2.1
+Tested up to: 3.5
 Stable tag: trunk
 
 Allows you to publish products from your Nexternal store to your WordPress website.
 
 == Description ==
 
-This plugin allows you to easily publish products from your Nexternal store to your WordPress website.  The plugin uses Nexternal's API to query for the latest product information including price, images and more. 
+This plugin allows you to easily publish products from your Nexternal store to your pages and posts. It uses Nexternal's API to get the latest product information including price, images and more. 
 
-The plugin can display a single product, a custom sized product grid or a scrolling (horizontal or vertical) carousel of products.
+The plugin can display a single product, a product grid or a scrolling (horizontal or vertical) carousel of products.
+
+We have a few other custom Nexternal focused plugins not available in the plugin catalog. Contact us if you are interested.
 
 * [Plugin Homepage](http://www.alreadysetup.com/nexternal)
 * Please visit the homepage and register yourself for updates. We require your feedback to help this plugin evolve.
@@ -41,7 +43,7 @@ Security:
 
 Requirements/Restrictions:
 -------------------------
- * Works with WordPress 2.8+, WPMU, and BuddyPress (WordPress 3.0+ is highly recommended)
+ * Works with WordPress 2.8, possibly older versions.
 
 
 == Installation ==
