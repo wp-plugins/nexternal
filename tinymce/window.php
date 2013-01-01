@@ -3,7 +3,7 @@
 /*
 +----------------------------------------------------------------+
 +	nexternalPlugin-tinymce V1.60
-+	by Deanna Schneider
++	based on code by Deanna Schneider
 +   required for nexternalPlugin and WordPress 2.5
 +----------------------------------------------------------------+
 */
@@ -14,7 +14,7 @@ include_once ('../lib/nexternal-api.php');
 global $wpdb;
 
 // check for rights
-if ( !is_user_logged_in() || !current_user_can('edit_posts') ) 
+if ( !is_user_logged_in() || !current_user_can('edit_posts') )
 	wp_die(__("You are not allowed to be here"));
 
 $errorMessage = '';
@@ -63,7 +63,7 @@ if ($data['activeKey'] == '' || $data['accountName'] == '') {
             $productOptions .= "\"$productName\",";
             $productSKUs .= "productSKUs['$productName'] = '$productSKU';\n";
     }
-    $productOptions = substr($productOptions, 0, -1); // remove the last comma from product 
+    $productOptions = substr($productOptions, 0, -1); // remove the last comma from product
     if ($productSKUs == '') wp_die(__("There are no products in the Nexternal store: <b>" . $data['accountName'] . "</b><br>You will be unable to add a Product List to your post."));
 }
 
@@ -96,18 +96,18 @@ if ($dh = opendir($path)) {
 
 	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
 
-    <script src="http://code.jquery.com/jquery-1.6.3.js"></script> 
-	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script> 
-	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script> 
-	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script> 
-	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script> 
+    <script src="http://code.jquery.com/jquery-1.6.3.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
 
 	<script language="javascript" type="text/javascript">
 
     // generate SKUs javascript, since they need to be converted from productName to productSku via the ProductSku javascript scoped array
     var productSKUs = new Array();
     <?php echo $productSKUs; ?>
-	
+
 	function init() {
 		tinyMCEPopup.resizeToInnerSize();
 	}
@@ -150,11 +150,11 @@ if ($dh = opendir($path)) {
         tagtext += attributeFor('carousel');
 
         if (document.getElementById('carousel').value == 'horizontal' || document.getElementById('carousel').value == 'vertical') {
-            tagtext += attributeFor('productsInView');    
+            tagtext += attributeFor('productsInView');
         } else if (document.getElementById('carousel').value == 'none') {
             tagtext += attributeFor('gridSizeRows');
             tagtext += attributeFor('gridSizeColumns');
-        }       
+        }
 
         tagtext += attributeForCheckbox('displayProductRating');
         tagtext += attributeForCheckbox('displayProductPrice');
@@ -182,13 +182,13 @@ if ($dh = opendir($path)) {
 
 		if(window.tinyMCE) {
 			window.tinyMCE.execInstanceCommand('content', 'mceInsertContent', false, tagtext);
-			//Peforms a clean up of the current editor HTML. 
+			//Peforms a clean up of the current editor HTML.
 			//tinyMCEPopup.editor.execCommand('mceCleanup');
-			//Repaints the editor. Sometimes the browser has graphic glitches. 
+			//Repaints the editor. Sometimes the browser has graphic glitches.
 			tinyMCEPopup.editor.execCommand('mceRepaint');
 			tinyMCEPopup.close();
 		}
-		
+
 		return;
 	}
 
@@ -196,30 +196,30 @@ if ($dh = opendir($path)) {
         if (eventValue == 'none') {
             document.getElementById("gridOptions").style.display = 'block';
             document.getElementById("coureselOptions").style.display = 'none';
-            document.getElementById("singleOptions").style.display = 'none';  
+            document.getElementById("singleOptions").style.display = 'none';
         }
         if (eventValue == 'horizontal' || eventValue == 'vertical') {
             document.getElementById("gridOptions").style.display = 'none';
-            document.getElementById("coureselOptions").style.display = 'block'; 
-            document.getElementById("singleOptions").style.display = 'none'; 
+            document.getElementById("coureselOptions").style.display = 'block';
+            document.getElementById("singleOptions").style.display = 'none';
         }
         if (eventValue == 'single') {
             document.getElementById("gridOptions").style.display = 'none';
-            document.getElementById("coureselOptions").style.display = 'none'; 
-            document.getElementById("singleOptions").style.display = 'block'; 
+            document.getElementById("coureselOptions").style.display = 'none';
+            document.getElementById("singleOptions").style.display = 'block';
         }
     }
 
     function addProduct() {
-        productName = document.getElementById('product').value;        
-        
+        productName = document.getElementById('product').value;
+
         sku = productSKUs[productName];
         if (!sku) { alert("The product " + productName + " is invalid."); return false; }
 
         var newOption = document.createElement("option");
         newOption.text = productName;
         newOption.value = productName;
-            
+
         document.getElementById('productSKUs').options.add(newOption);
         document.getElementById('productSKUs').style.background = 'white';
         document.getElementById('product').value = '';
@@ -227,7 +227,7 @@ if ($dh = opendir($path)) {
         document.getElementById('product').style.background = 'white';
         return false;
     }
-    
+
     function removeProduct() {
         var selected = document.getElementById('productSKUs');
         for(var i = selected.options.length - 1; i >= 0; i--)
@@ -248,7 +248,7 @@ if ($dh = opendir($path)) {
 
             <h4 style="color: black">Products in Carousel/Grid:</h4>
 
-	        <script> 
+	        <script>
 	        $(function() {
 		        var availableTags = [
 			        <?php echo $productOptions; ?>
@@ -258,7 +258,7 @@ if ($dh = opendir($path)) {
 		        });
 	        });
 
-	        </script> 
+	        </script>
             <p><input id="product" name="product" style="width: 250px;" > <input type="submit" onclick="return addProduct();" value="Add" /></p>
 
             <p>
@@ -293,9 +293,9 @@ if ($dh = opendir($path)) {
             <div id="singleOptions" style="display: <?php echo $coureselSingleDisplay?>;">
                 <b>Note:</b> The first product in the Product List (above) will be displayed.
             </div>
-     
+
             <p>
-                <input type="checkbox" id="displayProductRating" name="displayProductRating" <?php echo $displayProductRatingChecked;?>> Display Product Rating?<br>       
+                <input type="checkbox" id="displayProductRating" name="displayProductRating" <?php echo $displayProductRatingChecked;?>> Display Product Rating?<br>
                 <input type="checkbox" id="displayProductPrice" name="displayProductPrice"<?php echo $displayProductPriceChecked;?>> Display Product Price?<br>
                 <input type="checkbox" id="displayProductOriginalPrice" name="displayProductOriginalPrice" <?php echo $displayProductOriginalPriceChecked;?>> Display Product's Original Price?<br>
                 <input type="checkbox" id="displayProductImage" name="displayProductImage" <?php echo $displayProductImageChecked;?>> Display Product's Image?<br>

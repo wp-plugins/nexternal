@@ -89,6 +89,13 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://www.alreadyse
 
 == Changelog ==
 
+= 1.1.7b =
+- stop curl from getting hung up on SSL certs from nexternal (nexternal-api curl_post)
+- fixed bug where tinymce window wasnt able to find javascript file (window.php jquery-1.7.2.min.js)
+
+= 1.1.6 =
+- fixed jquery UI inclusion bug (another bug)
+
 = 1.1.5 =
 - Modified jquery instantiation
 

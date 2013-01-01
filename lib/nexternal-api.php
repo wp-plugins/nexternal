@@ -94,9 +94,10 @@ function curl_post($url, $xml, $test=false) {
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $xml); 
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     $output = curl_exec($ch);
-    curl_close($ch);
 
     if ($test) echo "received response:\n$output\n\n";
 
@@ -111,6 +112,7 @@ function nexternal_getActiveKey($accountName, $username, $password) {
     $xmlResponse = curl_post($url, $xml);
 
     // get key from TestSubmitReply
+    if (!$xmlResponse) return null;
     $xmlData = new SimpleXMLElement($xmlResponse);
     $testKey = $xmlData->TestKey;
     $attributes = $xmlData->attributes();

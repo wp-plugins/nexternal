@@ -13,7 +13,7 @@ class nexternal_shortcodes {
 
         $data = get_option('nexternal');
         if ($data['activeKey'] == '') return; // abort if there is no active key
-        
+
         $customLinkAttributes = $data['customLinkAttributes'];
 
         $randomId = "default-" . dechex(rand(0, hexdec('ff')));
@@ -61,7 +61,7 @@ class nexternal_shortcodes {
             $productData = $data['productData'][$productSKU];
 
             // if the product data is not available OR the product data has expired, reload it from nexternal
-            if (!$productData or $productData['expires'] < time()) {
+            if (!$productData or $productData['expires'] < time() or true) {
                 // retreive product data
 
                 $url = "https://www.nexternal.com/shared/xml/productquery.rest";
@@ -87,7 +87,7 @@ class nexternal_shortcodes {
                     $discountPrice = $price * (1-$percentDiscount);
                     $price = floor($discountPrice*100)/100;
                 }
-                if ($price == 0) {                 
+                if ($price == 0) {
                     foreach ($xmlData->Product->SKU as $SKU)
                         foreach ($SKU as $element) if ($element->getName() == "Default") $price = $SKU->Pricing->Price . '';
                 }
@@ -123,27 +123,27 @@ class nexternal_shortcodes {
             if ($carousel == 'grid' && $i % $gridsizecolumns == 0 && $i != 0) $out .= "<br style='clear: both;'>";
 
             if ($productName != '') {
-            
+
                 $out .= "<li class='nexternal-$style-product nexternal-$style-product-$i nexternal-$style-product-sku-$productSKU'>";
-                
+
                 if ($displayproductname == 'true')
                     $out .= "<div class='nexternal-$style-product-name nexternal-$style-product-name-$productSKU'><a href='$productUrl' " . stripslashes($customLinkAttributes) . ">$productName</a></div>";
-                    
+
                 if ($displayproductimage == 'true')
                     $out .= "<div class='nexternal-$style-product-image nexternal-product-image-$productSKU'><a href='$productUrl' " . stripslashes($customLinkAttributes) . "><img src='$productImage' border='0'></a></div>";
-                    
+
                 if ($displayproductrating == 'true' and $productRating != '')
                     $out .= "<div class='nexternal-$style-product-rating nexternal-$style-product-rating-$productSKU' style='width: ".$productRatingWidth."px'></div>";
 
                 if ($displayproductshortdescription == 'true')
                     $out .= "<div class='nexternal-$style-product-shortdescription nexternal-$style-product-shortdescription-$productSKU'>$productShortDescription</div>";
-                    
+
                 if ($displayproductoriginalprice == 'true' and $productOriginalPrice != $price)
                     $out .= "<div class='nexternal-$style-product-original-price nexternal-$style-product-original-price-$productSKU'>$$productOriginalPrice</div>";
-                    
+
                 if ($displayproductprice == 'true')
                     $out .= "<div class='nexternal-$style-product-price nexternal-$style-product-price-$productSKU'>$$productPrice</div>";
-                    
+
                 $out .= "</li>";
             }
 
@@ -174,6 +174,6 @@ class nexternal_shortcodes {
 
 }
 
-$nexternalShortcodes = new nexternal_Shortcodes;	
+$nexternalShortcodes = new nexternal_Shortcodes;
 
 ?>

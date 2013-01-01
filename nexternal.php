@@ -1,12 +1,15 @@
 <?php
 /*
 Plugin Name: Nexternal
-Description: Allows users to include Nexternal product information into their posts
+Description: Allows users to include Nexternal product information into their posts and pages
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
-Version: 1.1.5
+Version: 1.1.7b
 
 CHANGELOG:
+1/1/13 - 1.1.7b - stop curl from getting hung up on SSL certs from nexternal (nexternal-api curl_post)
+                 fixed bug where tinymce window wasnt able to find javascript file (window.php jquery-1.7.2.min.js)
+5/31/12 - 1.1.6 - fixed jquery UI inclusion bug (another bug)
 10/11/11 - 1.1.5 - fixed jquery inclusion bug
 10/3/11 - 1.1.4 - added strrpos to productOptions generation in window.php. This prevents the list of options from ending in a comma
 10/3/11 - 1.1.4 - updated jQuery version in window.php, jQuery moved their hosted javascript files to code.jquery.com
