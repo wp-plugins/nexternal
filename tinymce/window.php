@@ -94,14 +94,11 @@ if ($dh = opendir($path)) {
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/mctabs.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl') ?>/wp-includes/js/tinymce/utils/form_utils.js"></script>
 
-	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
 
-    <script src="http://code.jquery.com/jquery-1.6.3.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
-	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
-
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	        
 	<script language="javascript" type="text/javascript">
 
     // generate SKUs javascript, since they need to be converted from productName to productSku via the ProductSku javascript scoped array

@@ -4,9 +4,10 @@ Plugin Name: Nexternal
 Description: Allows users to include Nexternal product information into their posts and pages
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
-Version: 1.1.7b
+Version: 1.2
 
 CHANGELOG:
+1/1/13 - 1.2 - updated jquery and jquery ui cdn references (window.php)
 1/1/13 - 1.1.7b - stop curl from getting hung up on SSL certs from nexternal (nexternal-api curl_post)
                  fixed bug where tinymce window wasnt able to find javascript file (window.php jquery-1.7.2.min.js)
 5/31/12 - 1.1.6 - fixed jquery UI inclusion bug (another bug)
@@ -260,6 +261,28 @@ HTML;
 
     echo $html;
 
+}
+
+/* Display a notice that can be dismissed */
+add_action('admin_notices', 'nexternal_admin_notice');
+function nexternal_admin_notice() {
+	global $current_user ;
+        $user_id = $current_user->ID;
+        /* Check that the user hasn't already clicked to ignore the message */
+	if ( !(strtotime("2014-04-17") < time()) && ! get_user_meta($user_id, 'nexternal_ignore_notice') ) {
+        echo '<div class="updated"><p>';
+        printf(__('AlreadySetUp will be hosting a webinar with Nexternal on Apr 17th 2014, be sure to stop by for the most current insight on Nexternal to Wordpress integration and more! <a href="http://alreadysetup.com/home/maximizing-wordpress-nexternal" target="_blank">Details / Register</a> | <a href="%1$s">Dismiss</a>'), '?nexternal_msg_ignore=0');
+        echo "</p></div>";
+	}
+}
+add_action('admin_init', 'nexternal_msg_ignore');
+function nexternal_msg_ignore() {
+	global $current_user;
+        $user_id = $current_user->ID;
+        /* If user clicks to ignore the notice, add that to their user meta */
+        if ( isset($_GET['nexternal_msg_ignore']) && '0' == $_GET['nexternal_msg_ignore'] ) {
+             add_user_meta($user_id, 'nexternal_ignore_notice', 'true', true);
+	}
 }
 
 ?>
