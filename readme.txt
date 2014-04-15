@@ -1,9 +1,9 @@
 === Nexternal ===
 Contributors: Nathan Smallcomb
-Author URI: http://www.alreadysetup.com/nexternal
+Author URI: http://alreadysetup.com/nexternal
 Tags: ecommerce, shopping, store, nexternal, sell
 Requires at least: 2.8
-Tested up to: 3.5
+Tested up to: 3.8.3
 Stable tag: trunk
 
 Allows you to publish products from your Nexternal store to your WordPress website.
@@ -16,7 +16,7 @@ The plugin can display a single product, a product grid or a scrolling (horizont
 
 We have a few other custom Nexternal focused plugins not available in the plugin catalog. Contact us if you are interested.
 
-* [Plugin Homepage](http://www.alreadysetup.com/nexternal)
+* [Plugin Homepage](http://alreadysetup.com/nexternal)
 * Please visit the homepage and register yourself for updates. We require your feedback to help this plugin evolve.
 
 = Why Is This Plugin Free? =
@@ -72,7 +72,7 @@ Requirements/Restrictions:
 
 == Frequently Asked Questions ==
 
-[See the official FAQ at AlreadySetUp.com](http://www.AlreadySetUp.com/nexternal)
+[See the official FAQ at AlreadySetUp.com](http://AlreadySetUp.com/nexternal)
 
 = I just installed this and cannot get it to accept my credentials =
 
@@ -80,13 +80,13 @@ Be sure you have authorized your account to access the API within the Nexternal 
 
 = Do you offer support for this plugin =
 
-Absolutely! For more help... [contact Already Set Up](http://www.alreadysetup.com/contact)
+Absolutely! For more help... [contact Already Set Up](http://alreadysetup.com/home/contact-us)
 
 = Is this plugin available in other languages? =
 
 No, sorry.
 
-For more help... [See the official FAQ at AlreadySetUp.com](http://www.alreadysetup.com/nexternal)
+For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.com/nexternal)
 
 
 == Changelog ==
