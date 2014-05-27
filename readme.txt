@@ -3,7 +3,7 @@ Contributors: Nathan Smallcomb
 Author URI: http://alreadysetup.com/nexternal
 Tags: ecommerce, shopping, store, nexternal, sell
 Requires at least: 2.8
-Tested up to: 3.8.3
+Tested up to: 3.9
 Stable tag: trunk
 
 Allows you to publish products from your Nexternal store to your WordPress website.
@@ -56,7 +56,9 @@ Requirements/Restrictions:
 
 4. From the dashboard connect to the Nexternal API and configure the plugin's default options using the Nexternal menu at lower left.
 
-5. Click the Nexternal button on the post/page editor to begin publishing products.
+5. When connecting a user account, a Nexternal user of the type 'XML Tools', with the 'ProductQuery' option enabled should be used.
+
+6. Click the Nexternal button on the post/page editor to begin publishing products.
 
 
 == Screenshots ==
@@ -90,6 +92,11 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 
 == Changelog ==
+
+= 1.3 =
+- updated syntax to avoid depreciation warnings (multiple files)
+- updated enqueue_scripts call to use appropriate hook (nexternal.php)
+- changed authentication method to user/pass instead of activeKey (all files)
 
 = 1.2 =
 - changed jquery and jquery ui references to current cdn references (window.php)

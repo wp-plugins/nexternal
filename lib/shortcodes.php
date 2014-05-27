@@ -12,7 +12,8 @@ class nexternal_shortcodes {
 	function show_products ($atts) {
 
         $data = get_option('nexternal');
-        if ($data['activeKey'] == '') return; // abort if there is no active key
+        if ($data['userName'] == '') return; // abort if there is no active key
+        if (!isset($data['productData'])) $data['productData'] = array(); // get productData ready if undefined
 
         $customLinkAttributes = $data['customLinkAttributes'];
 
@@ -65,7 +66,7 @@ class nexternal_shortcodes {
                 // retreive product data
 
                 $url = "https://www.nexternal.com/shared/xml/productquery.rest";
-                $xml = generateProductQuery($data['accountName'], $data['activeKey'], $productSKU);
+                $xml = generateProductQuery($data['accountName'], $data['userName'], $data['pw'], $productSKU);
                 $xmlResponse = curl_post($url, $xml);
                 $xmlData = new SimpleXMLElement($xmlResponse);
 
@@ -110,10 +111,10 @@ class nexternal_shortcodes {
 
             // extract the values to show from the cache/datastore
             $productName = $productData['name'];
-            $productPrice = $productData['price'];
+            $productPrice = number_format($productData['price'],2);
             $productUrl = $productData['url'];
             $productImage = $productData['image'];
-            $productOriginalPrice = $productData['originalPrice'];
+            $productOriginalPrice = number_format($productData['originalPrice'],2);
             $productShortDescription = $productData['shortDescription'];
             $productRating = $productData['rating'];
 

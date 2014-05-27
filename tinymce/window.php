@@ -48,12 +48,14 @@ if ($data['defaultCarouselType'] == 'single') $coureselSingleDisplay = 'block';
 // load products for product drop down
 $productOptions = '';
 $productSKUs = '';
-if ($data['activeKey'] == '' || $data['accountName'] == '') {
+if ($data['userName'] == '' || $data['accountName'] == '') {
     wp_die(__("Unable to load product list, please make sure you<br>are linked to an account in the Nexternal Plugin Configuration. (1)"));
 } else {
     $url = 'https://www.nexternal.com/shared/xml/productquery.rest';
-    $xml = generateProductQueryRequest($data['accountName'], $data['activeKey']);
+    $xml = isset($data['userName']) ? generateProductQueryRequest($data['accountName'], $data['userName'], $data['pw']) : generateProductQueryRequestLegacy($data['accountName'], $data['activeKey']); 
+    //error_log('XML: '.$xml);
     $xmlResponse = curl_post($url, $xml);
+    //error_log('RESP: '.$xmlResponse);
     if ($xmlResponse == '') wp_die(__("Unable to load product list, please make sure you<br>are linked to an account in the Nexternal Plugin Configuration. (2)"));
     $xmlData = new SimpleXMLElement($xmlResponse);
     foreach ($xmlData->CurrentStatus->children() as $node) {
@@ -178,7 +180,14 @@ if ($dh = opendir($path)) {
         tagtext += "]";
 
 		if(window.tinyMCE) {
-			window.tinyMCE.execInstanceCommand('content', 'mceInsertContent', false, tagtext);
+			    /* get the TinyMCE version to account for API diffs */
+			    var tmce_ver=window.tinyMCE.majorVersion;
+
+			    if (tmce_ver>="4") {
+				window.tinyMCE.execCommand('mceInsertContent', false, tagtext);
+			    } else {
+				window.tinyMCE.execInstanceCommand('content', 'mceInsertContent', false, tagtext);
+			    }			
 			//Peforms a clean up of the current editor HTML.
 			//tinyMCEPopup.editor.execCommand('mceCleanup');
 			//Repaints the editor. Sometimes the browser has graphic glitches.

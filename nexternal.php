@@ -4,14 +4,17 @@ Plugin Name: Nexternal
 Description: Allows users to include Nexternal product information into their posts and pages
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
-Version: 1.2
+Version: 1.3
 
 CHANGELOG:
-1/1/13 - 1.2 - updated jquery and jquery ui cdn references (window.php)
-1/1/13 - 1.1.7b - stop curl from getting hung up on SSL certs from nexternal (nexternal-api curl_post)
-                 fixed bug where tinymce window wasnt able to find javascript file (window.php jquery-1.7.2.min.js)
-5/31/12 - 1.1.6 - fixed jquery UI inclusion bug (another bug)
-10/11/11 - 1.1.5 - fixed jquery inclusion bug
+5/23/14	- 1.3	- updated syntax to avoid depreciation warnings (multiple files)
+		- updated enqueue_scripts call to use appropriate hook (nexternal.php)
+		- changed authentication method to user/pass instead of activeKey (all files)
+4/14/14	- 1.2	- updated jquery and jquery ui cdn references (window.php)
+1/1/13	- 1.1.7b- stop curl from getting hung up on SSL certs from nexternal (nexternal-api curl_post)
+		- fixed bug where tinymce window wasnt able to find javascript file (window.php jquery-1.7.2.min.js)
+5/31/12	- 1.1.6	- fixed jquery UI inclusion bug (another bug)
+10/11/11- 1.1.5	- fixed jquery inclusion bug
 10/3/11 - 1.1.4 - added strrpos to productOptions generation in window.php. This prevents the list of options from ending in a comma
 10/3/11 - 1.1.4 - updated jQuery version in window.php, jQuery moved their hosted javascript files to code.jquery.com
 7/29/11 - 1.1.3 - added custom attributes link field to nexternal menu. this is put into the texts and images <a> tag.
@@ -25,7 +28,10 @@ include_once (dirname (__FILE__)."/lib/shortcodes.php");
 define('nexternalPlugin_ABSPATH', WP_PLUGIN_DIR.'/'.plugin_basename( dirname(__FILE__) ).'/' );
 define('nexternalPlugin_URLPATH', WP_PLUGIN_URL.'/'.plugin_basename( dirname(__FILE__) ).'/' );
 
-wp_enqueue_script("jquery");
+function nexternal_scripts() {
+  wp_enqueue_script("jquery");
+}
+add_action( 'wp_enqueue_scripts', 'nexternal_scripts' );
 
 add_action('admin_menu', 'nexternal_menu');
 add_action('wp_head', 'nexternal_head');
@@ -37,13 +43,13 @@ function nexternal_endsWith($haystack,$needle,$case=true) {
 
 function nexternal_head() {
 
-    echo '<script type="text/javascript" src="' . get_settings('siteurl') . '/wp-content/plugins/nexternal/carousel/jcarousellite.js"></script>' . "\n";
+    echo '<script type="text/javascript" src="' . get_option('siteurl') . '/wp-content/plugins/nexternal/carousel/jcarousellite.js"></script>' . "\n";
 
     $path = ABSPATH.'wp-content/plugins/nexternal/styles';
     if ($dh = opendir($path)) {
         while (($file = readdir($dh)) !== false) {
             if (nexternal_endsWith($file, '.css', false))
-                echo "<link rel='stylesheet' type='text/css' media='all' href='" . get_settings('siteurl') . "/wp-content/plugins/nexternal/styles/$file'/>" . "\n";
+                echo "<link rel='stylesheet' type='text/css' media='all' href='" . get_option('siteurl') . "/wp-content/plugins/nexternal/styles/$file'/>" . "\n";
         }
         closedir($dh);
     }
@@ -73,6 +79,8 @@ function nexternal_display_menu() {
     $data = get_option('nexternal');
     $activeKey = $data['activeKey'];
     $accountName = $data['accountName'];
+    $userName = $data['userName'];
+    $password = $data['pw'];
 
     // copy default options into data and save it, only if the form was submitted
     if (isset($_POST['updated'])) {
@@ -99,16 +107,18 @@ function nexternal_display_menu() {
 
             // try to get an active key from Nexternal
             $accountName = $_POST['nexternal_accountName'];
-            $username = $_POST['nexternal_username'];
+            $userName = $_POST['nexternal_username'];
             $password = $_POST['nexternal_password'];
-            $activeKey = nexternal_getActiveKey($accountName, $username, $password);
+            $verified = nexternal_testCredentials($accountName, $userName, $password);
 
             // check for failure
-            if (empty($activeKey)) $errorMessages[] = 'Unable to connect to Nexternal, check username and password.';
+            if (!$verified) $errorMessages[] = 'Unable to connect to Nexternal, check username and password.';
             else {
                 // if it worked, save the activeKey to Wordpress
-                $data['activeKey'] = $activeKey;
+                //$data['activeKey'] = $activeKey;
                 $data['accountName'] = $accountName;
+    		$data['userName'] = $userName;
+    		$data['pw'] = $password;
                 update_option('nexternal', $data);
             }
 
@@ -129,7 +139,7 @@ function nexternal_display_menu() {
     }
 
     // determine if an activeKey has already been established
-    if ($activeKey != '' && $accountName != '') {
+    if ($userName != '' && $password != '' && $accountName != '') {
         $linkStatus = <<<HTML
             <p>You are currently linked to the account: $accountName. You do not neeed to enter your username and password again.</p>
             <p><input type="button" value="Link to a Different Account" onclick="document.getElementById('nexternal-link').style.display = 'block';"></p>
@@ -192,7 +202,8 @@ HTML;
 	        <p><strong>Account Name:</strong>
 	        <input type="text" name="nexternal_accountName" size="45"/></p>
 
-            <p>Enter your username and password. This information will <b>not</b> be stored. Once you've entered your username and password, an encryption key will be retrieved and used to communicate with the Nexternal API.</p>
+            <p>Enter your username and password. This information will be used to communicate with the Nexternal API.</p>
+            <p>This user should be a Nexternal user of the type 'XML Tools', with the 'ProductQuery' option enabled.</p>
 
 	        <p><strong>Username:</strong>
 	        <input type="text" name="nexternal_username" size="45" /></p>
@@ -268,10 +279,17 @@ add_action('admin_notices', 'nexternal_admin_notice');
 function nexternal_admin_notice() {
 	global $current_user ;
         $user_id = $current_user->ID;
+
+    $data = get_option('nexternal');
+    $userName = $data['userName'];
+    if(!empty($_POST['nexternal_username'])) {
+      $userName = $_POST['nexternal_username'];
+    }
+
         /* Check that the user hasn't already clicked to ignore the message */
-	if ( !(strtotime("2014-04-17") < time()) && ! get_user_meta($user_id, 'nexternal_ignore_notice') ) {
-        echo '<div class="updated"><p>';
-        printf(__('AlreadySetUp will be hosting a webinar with Nexternal on Apr 17th 2014, be sure to stop by for the most current insight on Nexternal to Wordpress integration and more! <a href="http://alreadysetup.com/home/maximizing-wordpress-nexternal" target="_blank">Details / Register</a> | <a href="%1$s">Dismiss</a>'), '?nexternal_msg_ignore=0');
+	if ( !$userName) {
+        echo '<div class="error"><p>';
+        echo __('Your Nexternal account needs to be re-authenticated using your Nexternal username and password.  Please <a href="'.admin_url( 'admin.php?page=nexternal_menu').'">re-link your account now</a>.');
         echo "</p></div>";
 	}
 }

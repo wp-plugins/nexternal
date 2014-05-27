@@ -1,12 +1,13 @@
 <?php
 
-function generateProductQueryRequest($accountName, $key) {
+function generateProductQueryRequest($accountName, $username, $password) {
     $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ProductQueryRequest>
   <Credentials>
     <AccountName>$accountName</AccountName>
-    <Key>$key</Key>
+    <UserName>$username</UserName>
+    <Password>$password</Password>
   </Credentials>
   <ProductNoRange>
     <ProductNoStart>0</ProductNoStart>
@@ -67,7 +68,42 @@ XML;
 
 }
 
-function generateProductQuery($accountName, $key, $SKU) {
+function generateProductQuery($accountName, $username, $password, $SKU) {
+
+    return <<<XML
+<?xml version="1.0" encoding="utf-8" ?>
+<ProductQueryRequest>
+  <Credentials>
+    <AccountName>$accountName</AccountName>
+    <UserName>$username</UserName>
+    <Password>$password</Password>
+  </Credentials>
+  <ProductSKU>$SKU</ProductSKU>
+  <IncludeReviews></IncludeReviews>
+</ProductQueryRequest>
+XML;
+
+}
+
+function generateProductQueryRequestLegacy($accountName, $key) {
+    $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductQueryRequest>
+  <Credentials>
+    <AccountName>$accountName</AccountName>
+    <Key>$key</Key>
+  </Credentials>
+  <ProductNoRange>
+    <ProductNoStart>0</ProductNoStart>
+    <ProductNoEnd>999999999</ProductNoEnd>
+  </ProductNoRange>
+  <CurrentStatus />
+</ProductQueryRequest>
+XML;
+    return $xml;
+}
+
+function generateProductQueryLegacy($accountName, $key, $SKU) {
 
     return <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -82,6 +118,7 @@ function generateProductQuery($accountName, $key, $SKU) {
 XML;
 
 }
+
 
 
 function curl_post($url, $xml, $test=false) {
@@ -114,7 +151,9 @@ function nexternal_getActiveKey($accountName, $username, $password) {
     // get key from TestSubmitReply
     if (!$xmlResponse) return null;
     $xmlData = new SimpleXMLElement($xmlResponse);
+    error_log($xmlData);
     $testKey = $xmlData->TestKey;
+    $checkuser = $xmlData->UserName;
     $attributes = $xmlData->attributes();
     $testKeyLocation = $attributes['Type'];
 
@@ -129,7 +168,24 @@ function nexternal_getActiveKey($accountName, $username, $password) {
 
     //echo "ActiveKey received: $activeKey\n\n";
 
-    return $activeKey . '';
+    if($activeKey) return $activeKey . '';
+    if($checkuser) return $checkuser . '';
+    return '';
+}
+
+function nexternal_testCredentials($accountName, $username, $password) {
+
+	$url = "https://www.nexternal.com/shared/xml/productquery.rest";
+	$xml = generateProductQueryRequest($accountName, $username, $password);
+	$xmlResponse = curl_post($url, $xml);
+	$xmlData = new SimpleXMLElement($xmlResponse);
+    	$attributes = $xmlData->attributes();
+
+	if($attributes['AccountName'] == $accountName) {
+	  return 1;
+	}
+	return 0;
+
 }
 
 
