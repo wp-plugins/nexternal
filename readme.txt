@@ -3,7 +3,7 @@ Contributors: Nathan Smallcomb
 Author URI: http://alreadysetup.com/nexternal
 Tags: ecommerce, shopping, store, nexternal, sell
 Requires at least: 2.8
-Tested up to: 3.9
+Tested up to: 3.9.1
 Stable tag: trunk
 
 Allows you to publish products from your Nexternal store to your WordPress website.
