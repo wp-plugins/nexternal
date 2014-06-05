@@ -47,7 +47,7 @@ if ($data['defaultCarouselType'] == 'single') $coureselSingleDisplay = 'block';
 
 // load products for product drop down
 $productOptions = '';
-$productSKUs = '';
+$productIDs = '';
 if ($data['userName'] == '' || $data['accountName'] == '') {
     wp_die(__("Unable to load product list, please make sure you<br>are linked to an account in the Nexternal Plugin Configuration. (1)"));
 } else {
@@ -61,12 +61,12 @@ if ($data['userName'] == '' || $data['accountName'] == '') {
     foreach ($xmlData->CurrentStatus->children() as $node) {
             $attributes = $node->attributes();
             $productName = addslashes($attributes["Name"]);
-            $productSKU = $attributes["SKU"];
+            $productID = $attributes["No"];
             $productOptions .= "\"$productName\",";
-            $productSKUs .= "productSKUs['$productName'] = '$productSKU';\n";
+            $productIDs .= "productIDs['$productName'] = '$productID';\n";
     }
     $productOptions = substr($productOptions, 0, -1); // remove the last comma from product
-    if ($productSKUs == '') wp_die(__("There are no products in the Nexternal store: <b>" . $data['accountName'] . "</b><br>You will be unable to add a Product List to your post."));
+    if ($productIDs == '') wp_die(__("There are no products in the Nexternal store: <b>" . $data['accountName'] . "</b><br>You will be unable to add a Product List to your post."));
 }
 
 // load available styles
@@ -104,8 +104,8 @@ if ($dh = opendir($path)) {
 	<script language="javascript" type="text/javascript">
 
     // generate SKUs javascript, since they need to be converted from productName to productSku via the ProductSku javascript scoped array
-    var productSKUs = new Array();
-    <?php echo $productSKUs; ?>
+    var productIDs = new Array();
+    <?php echo $productIDs; ?>
 
 	function init() {
 		tinyMCEPopup.resizeToInnerSize();
@@ -124,7 +124,7 @@ if ($dh = opendir($path)) {
 
 	function insertShortcode() {
 
-        var selectElement = document.getElementById('productSKUs');
+        var selectElement = document.getElementById('productIDs');
 
         if (document.getElementById('product').value != '') {
             alert("You entered a product but did not select 'Add'");
@@ -138,7 +138,7 @@ if ($dh = opendir($path)) {
         }
         if (selectElement.options.length == 0) {
             alert("You must enter at least 1 product.");
-            document.getElementById('productSKUs').style.background = '#FF9996';
+            document.getElementById('productIDs').style.background = '#FF9996';
             document.getElementById('product').style.background = '#FF9996';
             return false;
         }
@@ -163,12 +163,12 @@ if ($dh = opendir($path)) {
         tagtext += attributeForCheckbox('displayProductShortDescription');
         tagtext += attributeFor('style');
 
-        tagtext += ' productSKUs = "'
+        tagtext += ' productIDs = "'
         var selectedArray = new Array();
         var i;
         var first = true;
         for (i = 0; i < selectElement.options.length; i++) {
-            value = productSKUs[selectElement.options[i].value];
+            value = productIDs[selectElement.options[i].value];
             if (!value) { alert("The product " + selectElement.options[i].value + " is invalid."); return false; }
             if (!first) tagtext += ",";
             first = false;
@@ -219,15 +219,15 @@ if ($dh = opendir($path)) {
     function addProduct() {
         productName = document.getElementById('product').value;
 
-        sku = productSKUs[productName];
+        sku = productIDs[productName];
         if (!sku) { alert("The product " + productName + " is invalid."); return false; }
 
         var newOption = document.createElement("option");
         newOption.text = productName;
         newOption.value = productName;
 
-        document.getElementById('productSKUs').options.add(newOption);
-        document.getElementById('productSKUs').style.background = 'white';
+        document.getElementById('productIDs').options.add(newOption);
+        document.getElementById('productIDs').style.background = 'white';
         document.getElementById('product').value = '';
         document.getElementById('product').focus();
         document.getElementById('product').style.background = 'white';
@@ -235,7 +235,7 @@ if ($dh = opendir($path)) {
     }
 
     function removeProduct() {
-        var selected = document.getElementById('productSKUs');
+        var selected = document.getElementById('productIDs');
         for(var i = selected.options.length - 1; i >= 0; i--)
             if(selected.options[i].selected) selected.remove(i);
     }
@@ -248,7 +248,7 @@ if ($dh = opendir($path)) {
 
 	<form name="nexternalPlugin" action="#">
 
-	<div class="panel_wrapper" style="height: 415px; border-top: 1px solid #919B9C;">
+	<div class="panel_wrapper" style="height: 480px; border-top: 1px solid #919B9C;">
 
 		<div id="options_panel" class="panel current">
 
@@ -268,7 +268,7 @@ if ($dh = opendir($path)) {
             <p><input id="product" name="product" style="width: 250px;" > <input type="submit" onclick="return addProduct();" value="Add" /></p>
 
             <p>
-                <select multiple size=4 id="productSKUs" name="productSKUs" style="width: 300px"></select>
+                <select multiple size=4 id="productIDs" name="productIDs" style="width: 300px"></select>
             </p>
             <p>
                 <input type="button" onclick="removeProduct();" value="Remove Selected" />

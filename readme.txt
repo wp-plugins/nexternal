@@ -58,18 +58,18 @@ Requirements/Restrictions:
 
 5. When connecting a user account, a Nexternal user of the type 'XML Tools', with the 'ProductQuery' option enabled should be used.
 
-6. Click the Nexternal button on the post/page editor to begin publishing products.
+6. Click the Nexternal button on the post/page visual editor to begin publishing products.
 
 
 == Screenshots ==
 
-1. screenshot-1.gif show the WordPress dashboard and the Nexternal settings button.
+1. screenshot-1.png show the WordPress dashboard and the Nexternal settings button.
 
-2. screenshot-2.gif shows the Nexternal settings window which enables you to set the Global Configuration and the Default Options.
+2. screenshot-2.png shows the Nexternal settings window which enables you to set the Global Configuration and the Default Options.
 
-3. screenshot-3.gif shows how to access the plugin from the post/page editor
+3. screenshot-3.png shows how to access the plugin from the post/page editor
 
-4. screenshot-4.gif is the plugin's main window.
+4. screenshot-4.png is the plugin's main window during content editing.
 
 
 == Frequently Asked Questions ==
@@ -78,7 +78,7 @@ Requirements/Restrictions:
 
 = I just installed this and cannot get it to accept my credentials =
 
-Be sure you have authorized your account to access the API within the Nexternal OMS
+Be sure you have authorized your account to access the API within the Nexternal OMS.  
 
 = Do you offer support for this plugin =
 
@@ -92,6 +92,14 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 
 == Changelog ==
+
+= 1.4 =
+- Nexternal authentication updates
+- updated plugin access (settings page, uninstall)
+- separated plugin settings to multiple pages
+- added basic instructions for connecting Nexternal account
+- changed product identification from SKU to productNumber, allowing non-SKU product support
+- altered inline editor height to avoid overlapping content
 
 = 1.3 =
 - updated syntax to avoid depreciation warnings (multiple files)
