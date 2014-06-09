@@ -93,6 +93,9 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 == Changelog ==
 
+= 1.4.1 =
+- Fix for shortcode representation in pages
+
 = 1.4 =
 - Nexternal authentication updates
 - updated plugin access (settings page, uninstall)

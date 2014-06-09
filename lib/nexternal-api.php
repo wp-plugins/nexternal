@@ -85,6 +85,26 @@ XML;
 
 }
 
+function generateProductQueryByID($accountName, $username, $password, $prodID) {
+    $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductQueryRequest>
+  <Credentials>
+    <AccountName>$accountName</AccountName>
+    <UserName>$username</UserName>
+    <Password>$password</Password>
+  </Credentials>
+  <ProductNoRange>
+    <ProductNoStart>$prodID</ProductNoStart>
+    <ProductNoEnd>$prodID</ProductNoEnd>
+  </ProductNoRange>
+  <IncludeReviews></IncludeReviews>
+</ProductQueryRequest>
+XML;
+    return $xml;
+}
+
+
 function generateProductQueryRequestLegacy($accountName, $key) {
     $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -119,6 +139,24 @@ XML;
 
 }
 
+function generateProductQueryByIDLegacy($accountName, $key, $prodID) {
+
+    return <<<XML
+<?xml version="1.0" encoding="utf-8" ?>
+<ProductQueryRequest>
+  <Credentials>
+    <AccountName>$accountName</AccountName>
+    <Key>$key</Key>
+  </Credentials>
+  <ProductNoRange>
+    <ProductNoStart>$prodID</ProductNoStart>
+    <ProductNoEnd>$prodID</ProductNoEnd>
+  </ProductNoRange>
+  <IncludeReviews></IncludeReviews>
+</ProductQueryRequest>
+XML;
+
+}
 
 
 function curl_post($url, $xml, $test=false) {

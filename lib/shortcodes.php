@@ -12,8 +12,9 @@ class nexternal_shortcodes {
 	function show_products ($atts) {
 
         $data = get_option('nexternal');
-        if ($data['userName'] == '') return; // abort if there is no active key
+        if ($data['userName'] == '' && $data['activeKey'] == '') return; // abort if there is no active key
         if (!isset($data['productData'])) $data['productData'] = array(); // get productData ready if undefined
+        if (!isset($data['productDataById'])) $data['productDataById'] = array(); // get productData ready if undefined
 
         $customLinkAttributes = $data['customLinkAttributes'];
 
@@ -32,11 +33,17 @@ class nexternal_shortcodes {
             'gridsizerows' => '3',
             'gridsizecolumns' => '3',
 			'productskus' => 'false',
+			'productids' => 'false',
             'style' => 'none',
             'id' => $randomId
 		), $atts));
 
         $sku = explode(",", $productskus);
+        $ids = explode(",", $productids);
+        
+        $useIDs = false;
+        if($ids[0] && isset($ids[0]) && $ids[0] != false && $ids[0] != 'false') $useIDs = true;
+        error_log("use ids? ($useIDs) [".$ids[0]."]");
 
         if ($style == 'none') $style = $data['defaultStyle'];
 
@@ -55,18 +62,35 @@ class nexternal_shortcodes {
         if ($carousel == 'horizontal' || $carousel == 'vertical') $out .= "<a class='nexternal-$style-$carousel-previous $id-previous'></a>";
 
         $out .= "<div class='nexternal-$style-$carousel $id'><ul>";
+        
+        $items = $useIDs?$ids:$sku;
+        $datas = $useIDs?$data['productDataById']:$data['productData'];
 
         for ($i = 0; $i < $itemsToDisplay; $i++) {
+        
+            error_log('Working with ('.$useIDs.'): '.$items[$i]);
 
-            $productSKU = $sku[$i];
-            $productData = $data['productData'][$productSKU];
+            $productIdentifier = $items[$i];
+            $productData = $datas[$productIdentifier];
 
             // if the product data is not available OR the product data has expired, reload it from nexternal
-            if (!$productData or $productData['expires'] < time() or true) {
+            if (!$productData or $productData['expires'] < time() or !$useIDs) {
                 // retreive product data
-
                 $url = "https://www.nexternal.com/shared/xml/productquery.rest";
-                $xml = generateProductQuery($data['accountName'], $data['userName'], $data['pw'], $productSKU);
+                $xml = false;
+                if($data['userName']) {
+			$xml = $useIDs?
+				generateProductQueryById($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
+				:
+				generateProductQuery($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
+				;
+		} else {
+			$xml = $useIDs?
+				generateProductQueryByIdLegacy($data['accountName'], $data['activeKey'], $productIdentifier)
+				:
+				generateProductQueryLegacy($data['accountName'], $data['activeKey'], $productIdentifier)
+				;
+		}
                 $xmlResponse = curl_post($url, $xml);
                 $xmlData = new SimpleXMLElement($xmlResponse);
 
@@ -96,6 +120,11 @@ class nexternal_shortcodes {
                 $productData['price'] = $price;
                 $productData['originalPrice'] = $originalPrice;
 
+
+                $productID = $xmlData->Product->ProductNo . '';
+                $productSKU = $xmlData->Product->ProductSKU . '';
+                $productData['productSKU'] = $productSKU;
+                $productData['productID'] = $productID;
                 $productData['name'] = $xmlData->Product->ProductName . '';
                 $productData['image'] = $xmlData->Product->Images->Thumbnail . ''; // optionally ->Main or ->Large
                 $productData['url'] = $xmlData->Product->ProductLink->StoreFront . '';
@@ -105,7 +134,8 @@ class nexternal_shortcodes {
                 $cacheDurationMax = 25*60*60;
                 $productData['expires'] = time() + rand($cacheDurationMin, $cacheDurationMax); // expire randomly, between 23 and 24 hours from now
 
-                $data['productData'][$productSKU] = $productData;
+                //$data['productData'][$productSKU] = $productData;
+                $data['productDataById'][$productID.''] = $productData;
                 update_option('nexternal', $data);
             }
 

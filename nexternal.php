@@ -5,9 +5,10 @@ Description: Allows users to include Nexternal product information into their po
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
 Plugin URI: http://AlreadySetUp.com/nexternal
-Version: 1.4
+Version: 1.4.1
 
 CHANGELOG:
+6/9/14	- 1.4.1	- Fix for shortcode representation in pages
 6/5/14	- 1.4	- Nexternal authentication updates
 		- updated plugin access (settings page, uninstall)
 		- separated plugin settings to multiple pages
