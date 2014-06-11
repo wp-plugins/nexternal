@@ -43,7 +43,9 @@ class nexternal_shortcodes {
         
         $useIDs = false;
         if($ids[0] && isset($ids[0]) && $ids[0] != false && $ids[0] != 'false') $useIDs = true;
-        error_log("use ids? ($useIDs) [".$ids[0]."]");
+
+        $items = $useIDs?$ids:$sku;
+        $datas = $useIDs?$data['productDataById']:$data['productData'];
 
         if ($style == 'none') $style = $data['defaultStyle'];
 
@@ -52,7 +54,7 @@ class nexternal_shortcodes {
 
         // determine how many items to render
         $itemsToDisplay = $gridsizerows * $gridsizecolumns;
-        if ($carousel == 'horizontal' || $carousel == 'vertical') $itemsToDisplay = count($sku);
+        if ($carousel == 'horizontal' || $carousel == 'vertical') $itemsToDisplay = count($items);
         if ($carousel == 'single') $itemsToDisplay = 1;
 
         // remove the .css extension from $style
@@ -63,8 +65,6 @@ class nexternal_shortcodes {
 
         $out .= "<div class='nexternal-$style-$carousel $id'><ul>";
         
-        $items = $useIDs?$ids:$sku;
-        $datas = $useIDs?$data['productDataById']:$data['productData'];
 
         for ($i = 0; $i < $itemsToDisplay; $i++) {
         

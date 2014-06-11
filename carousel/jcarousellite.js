@@ -333,10 +333,10 @@ function css(el, prop) {
 };
 
 function width(el) {
-    return  el[0].offsetWidth + css(el, 'marginLeft') + css(el, 'marginRight');
+    return  el.width() + css(el, 'marginLeft') + css(el, 'marginRight');
 };
 function height(el) {
-    return el[0].offsetHeight + css(el, 'marginTop') + css(el, 'marginBottom');
+    return  el.height() + css(el, 'marginTop') + css(el, 'marginBottom');
 };
 
 })(jQuery);

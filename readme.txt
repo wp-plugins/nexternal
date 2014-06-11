@@ -93,6 +93,9 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 == Changelog ==
 
+= 1.4.2 =
+- Fix for carousel jquery product ID support and box-model: border-box
+
 = 1.4.1 =
 - Fix for shortcode representation in pages
 
