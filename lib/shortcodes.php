@@ -12,7 +12,7 @@ class nexternal_shortcodes {
 	function show_products ($atts) {
 
         $data = get_option('nexternal');
-        if ($data['userName'] == '' && $data['activeKey'] == '') return; // abort if there is no active key
+        if ($data['userName'] == '') return; // abort if there is no active user
         if (!isset($data['productData'])) $data['productData'] = array(); // get productData ready if undefined
         if (!isset($data['productDataById'])) $data['productDataById'] = array(); // get productData ready if undefined
 
@@ -78,19 +78,11 @@ class nexternal_shortcodes {
                 // retreive product data
                 $url = "https://www.nexternal.com/shared/xml/productquery.rest";
                 $xml = false;
-                if($data['userName']) {
-			$xml = $useIDs?
-				generateProductQueryById($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
-				:
-				generateProductQuery($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
-				;
-		} else {
-			$xml = $useIDs?
-				generateProductQueryByIdLegacy($data['accountName'], $data['activeKey'], $productIdentifier)
-				:
-				generateProductQueryLegacy($data['accountName'], $data['activeKey'], $productIdentifier)
-				;
-		}
+		$xml = $useIDs?
+			generateProductQueryById($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
+			:
+			generateProductQuery($data['accountName'], $data['userName'], $data['pw'], $productIdentifier)
+			;
                 $xmlResponse = curl_post($url, $xml);
                 $xmlData = new SimpleXMLElement($xmlResponse);
 

@@ -52,7 +52,7 @@ if ($data['userName'] == '' || $data['accountName'] == '') {
     wp_die(__("Unable to load product list, please make sure you<br>are linked to an account in the Nexternal Plugin Configuration. (1)"));
 } else {
     $url = 'https://www.nexternal.com/shared/xml/productquery.rest';
-    $xml = isset($data['userName']) ? generateProductQueryRequest($data['accountName'], $data['userName'], $data['pw']) : generateProductQueryRequestLegacy($data['accountName'], $data['activeKey']); 
+    $xml = generateProductQueryRequest($data['accountName'], $data['userName'], $data['pw']); 
     //error_log('XML: '.$xml);
     $xmlResponse = curl_post($url, $xml);
     //error_log('RESP: '.$xmlResponse);

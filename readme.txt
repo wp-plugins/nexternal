@@ -93,6 +93,10 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 == Changelog ==
 
+= 1.5 =
+- Remove legacy code for authentication
+- Update notification code (internal)
+
 = 1.4.2 =
 - Fix for carousel jquery product ID support and box-model: border-box
 
@@ -146,6 +150,13 @@ For more help... [See the official FAQ at AlreadySetUp.com](http://alreadysetup.
 
 = 1.0 =
 - Initial release
+
+
+
+== Upgrade Notice ==
+
+= 1.5 =
+- After update you will be required to use Nexternal's new user-based credentials if you are not already.
 
 
 

@@ -5,9 +5,10 @@ Description: Allows users to include Nexternal product information into their po
 Author: Nathan Smallcomb
 Author URI: http://AlreadySetUp.com
 Plugin URI: http://AlreadySetUp.com/nexternal
-Version: 1.4.2
+Version: 1.5
 
 CHANGELOG:
+2/12/15	- 1.5	- Remove legacy code for authentication
 6/9/14	- 1.4.2	- Fix for carousel jquery product ID support and box-model: border-box
 6/9/14	- 1.4.1	- Fix for shortcode representation in pages
 6/5/14	- 1.4	- Nexternal authentication updates
@@ -154,8 +155,7 @@ function nexternal_display_general_menu() {
             // check for failure
             if (!$verified) $errorMessages[] = 'Unable to connect to Nexternal, check username and password.';
             else {
-                // if it worked, save the activeKey to Wordpress
-                //$data['activeKey'] = $activeKey;
+                // if it worked, save the user data to Wordpress
                 $data['accountName'] = $accountName;
     		$data['userName'] = $userName;
     		$data['pw'] = $password;
@@ -178,7 +178,7 @@ function nexternal_display_general_menu() {
         $displayErrors .= "</div>";
     }
 
-    // determine if an activeKey has already been established
+    // determine if a user account has already been established
     if ($data['userName'] != '' && $data['pw'] != '' && $data['accountName'] != '') {
         $linkStatus = <<<HTML
             <p>You are currently linked to the account: $accountName. You do not neeed to enter your username and password again.</p>
@@ -437,18 +437,14 @@ function nexternal_admin_notice() {
 	global $current_user ;
         $user_id = $current_user->ID;
 
-    $data = get_option('nexternal');
-    $userName = $data['userName'];
-    if(!empty($_POST['nexternal_username'])) {
-      $userName = $_POST['nexternal_username'];
-    }
-
         /* Check that the user hasn't already clicked to ignore the message */
-	if ( !$userName) {
-        echo '<div class="error"><p>';
-        echo __('Nexternal has updated the XMLTools API and your credentials need to be re-authenticated via the updated method.  Please <a href="'.admin_url( 'admin.php?page=nexternal_menu&tab=instruction').'">review the instructions</a> and then <a href="'.admin_url( 'admin.php?page=nexternal_menu&tab=account').'">re-link your account</a>.');
-        echo "</p></div>";
+	/* No actual message for this release
+	if (!get_user_meta($user_id, 'nexternal_ignore_notice_1_5') ) {
+          echo '<div class="updated"><p>';
+          printf(__('Message goes here | <a href="%1$s">Dismiss</a>'), '?nexternal_msg_ignore=0');
+          echo "</p></div>";
 	}
+	*/
 }
 add_action('admin_init', 'nexternal_msg_ignore');
 function nexternal_msg_ignore() {
@@ -456,7 +452,7 @@ function nexternal_msg_ignore() {
         $user_id = $current_user->ID;
         /* If user clicks to ignore the notice, add that to their user meta */
         if ( isset($_GET['nexternal_msg_ignore']) && '0' == $_GET['nexternal_msg_ignore'] ) {
-             add_user_meta($user_id, 'nexternal_ignore_notice', 'true', true);
+             add_user_meta($user_id, 'nexternal_ignore_notice_1_5', 'true', true);
 	}
 }
 

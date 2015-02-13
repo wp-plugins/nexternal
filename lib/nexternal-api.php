@@ -105,60 +105,6 @@ XML;
 }
 
 
-function generateProductQueryRequestLegacy($accountName, $key) {
-    $xml = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<ProductQueryRequest>
-  <Credentials>
-    <AccountName>$accountName</AccountName>
-    <Key>$key</Key>
-  </Credentials>
-  <ProductNoRange>
-    <ProductNoStart>0</ProductNoStart>
-    <ProductNoEnd>999999999</ProductNoEnd>
-  </ProductNoRange>
-  <CurrentStatus />
-</ProductQueryRequest>
-XML;
-    return $xml;
-}
-
-function generateProductQueryLegacy($accountName, $key, $SKU) {
-
-    return <<<XML
-<?xml version="1.0" encoding="utf-8" ?>
-<ProductQueryRequest>
-  <Credentials>
-    <AccountName>$accountName</AccountName>
-    <Key>$key</Key>
-  </Credentials>
-  <ProductSKU>$SKU</ProductSKU>
-  <IncludeReviews></IncludeReviews>
-</ProductQueryRequest>
-XML;
-
-}
-
-function generateProductQueryByIDLegacy($accountName, $key, $prodID) {
-
-    return <<<XML
-<?xml version="1.0" encoding="utf-8" ?>
-<ProductQueryRequest>
-  <Credentials>
-    <AccountName>$accountName</AccountName>
-    <Key>$key</Key>
-  </Credentials>
-  <ProductNoRange>
-    <ProductNoStart>$prodID</ProductNoStart>
-    <ProductNoEnd>$prodID</ProductNoEnd>
-  </ProductNoRange>
-  <IncludeReviews></IncludeReviews>
-</ProductQueryRequest>
-XML;
-
-}
-
-
 function curl_post($url, $xml, $test=false) {
 
     if ($test) echo "sending:\n$xml\nto: $url\n\n";
